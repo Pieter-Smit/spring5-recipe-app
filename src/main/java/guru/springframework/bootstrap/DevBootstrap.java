@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -14,8 +16,10 @@ import guru.springframework.domain.UnitOfMeasure;
 import guru.springframework.repositories.CategoryRepository;
 import guru.springframework.repositories.RecipeRepository;
 import guru.springframework.repositories.UnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
 	private RecipeRepository recipeRepository;
@@ -35,6 +39,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 	}
 
 	@Override
+	@Transactional
 	public void onApplicationEvent(ContextRefreshedEvent arg0) {
 		initData();		
 	}
@@ -45,6 +50,7 @@ public class DevBootstrap implements ApplicationListener<ContextRefreshedEvent> 
 	}
 	
 	private Recipe createPerfectGuacamole() {
+		log.debug("creating recipe");
 		Recipe perfectGuacamole = new Recipe();
 		perfectGuacamole.setDescription("The BEST guacamole! So easy to make with ripe avocados, salt, serrano chiles, cilantro and lime. Garnish with red radishes or jicama. Serve with tortilla chips.");
 		perfectGuacamole.setDirections("1 Cut avocado" + 
