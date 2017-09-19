@@ -39,7 +39,8 @@ public class RecipeServiceImplTest {
 		when(recipeRepository.findAll()).thenReturn(recipies);
 		
 		assertEquals(recipies.size(),  recipeServiceImpl.getRecipes().size());
-		verify(recipeRepository, times(2)).findAll();
+		verify(recipeRepository, times(1)).findAll();
+		
 	}
 
 }
