@@ -4,6 +4,9 @@ import guru.springframework.commands.RecipeCommand;
 import guru.springframework.exceptions.NotFoundException;
 import guru.springframework.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -45,7 +48,7 @@ public class RecipeController {
     }
 
     @PostMapping("recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand command){
+    public String saveOrUpdate(@Valid @ModelAttribute(name = "recipe") RecipeCommand command){
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
 
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
@@ -61,6 +64,7 @@ public class RecipeController {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
+//    @ExceptionHandler({NotFoundException.class, NumberFormatException.class})
     @ExceptionHandler(NotFoundException.class)
     public ModelAndView handleNotFound(Exception exception){
 
@@ -75,4 +79,21 @@ public class RecipeController {
 
         return modelAndView;
     }
+    
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//  @ExceptionHandler({NotFoundException.class, NumberFormatException.class})
+  @ExceptionHandler(NumberFormatException.class)
+  public ModelAndView handleBadRequest(Exception exception){
+
+      log.error("Handling bad request exception");
+      log.error(exception.getMessage());
+
+      ModelAndView modelAndView = new ModelAndView();
+
+      modelAndView.setViewName("400error");
+      modelAndView.addObject("exception", exception);
+
+
+      return modelAndView;
+  }
 }

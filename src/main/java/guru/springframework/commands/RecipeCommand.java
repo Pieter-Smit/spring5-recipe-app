@@ -8,6 +8,10 @@ import lombok.Setter;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
+
 /**
  * Created by jt on 6/21/17.
  */
@@ -16,6 +20,9 @@ import java.util.Set;
 @NoArgsConstructor
 public class RecipeCommand {
     private Long id;
+    
+    @NotBlank
+    @Size(min=3,max=8)
     private String description;
     private Integer prepTime;
     private Integer cookTime;
